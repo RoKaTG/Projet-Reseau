@@ -20,3 +20,41 @@ def diffusion(message) :
         client.send(message)      #envoi du signal qui est le msg
 
 
+#Methode qui sert d'handler pour les signaux
+
+def tri(client) :
+    while True:
+        try:
+            message = client.recv(1024)   #Envoi du message si aucune erreur
+            diffusion(message)
+        except:
+            index = liste_clients.index(client)     #Sinon ferme l'instance et deco le client
+            liste_clients.remove(client)
+            client.close()
+            user = pseudonyme[index]
+            user.pop()
+            break
+
+#Methode qui gére la reception des threads et signaux
+
+def reception() :
+    while True:
+        client, adress = serveur.accept()           #Pour accepter les differentes connexion de client
+        print(f"Connexion depuis : {str(adress)}")
+
+        client.send("USERNAME".encode('utf-8'))       #Gére la création d'un username
+        user = client.recv(1024)
+
+        pseudonyme.append(user)
+        liste_clients.append(client)
+
+        print(f"Votre pseudonyme est : {user}")
+
+        diffusion(f"{user} s'est connecté au salon\n".encode('utf-8'))
+        client.send("Vous vous êtes connecté au salon !")
+
+        thread = threading.Thread(target=tri, args=(client,))
+        thread.start()
+
+print("Server running...")
+reception()
