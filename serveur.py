@@ -1,7 +1,7 @@
 import socket
 import threading
 
-Host = ''           #Ip du serveur
+Host = '169.254.1.1'           #Ip du serveur
 Port = 8010         #Port à utilisé dependant des ports dispo
 
 serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #Création du serveur avec les sockets
