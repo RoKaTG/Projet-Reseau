@@ -1,7 +1,7 @@
 import socket
 import threading
 
-Host = '169.254.1.1'           #Ip du serveur
+Host = '169.254.1.1'  #127.0.0.1           #Ip du serveur
 Port = 8010         #Port à utilisé dependant des ports dispo
 
 serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #Création du serveur avec les sockets
@@ -32,26 +32,26 @@ def tri(client) :
             liste_clients.remove(client)
             client.close()
             user = pseudonyme[index]
-            user.pop()
+            pseudonyme.remove(user)
             break
 
 #Methode qui gére la reception des threads et signaux
 
 def reception() :
     while True:
-        client, adress = serveur.accept()           #Pour accepter les differentes connexion de client
-        print(f"Connexion depuis : {str(adress)}")
+        client, address = serveur.accept()           #Pour accepter les differentes connexion de client
+        print(f"Connexion depuis {str(address)}")
 
-        client.send("USERNAME".encode('utf-8'))       #Gére la création d'un username
+        client.send("Username".encode('utf-8'))       #Gére la création d'un username
         user = client.recv(1024)
 
         pseudonyme.append(user)
         liste_clients.append(client)
 
-        print(f"Votre pseudonyme est : {user}")
+        print(f"Votre pseudonyme est {user}")
 
         diffusion(f"{user} s'est connecté au salon\n".encode('utf-8'))
-        client.send("Vous vous êtes connecté au salon !")
+        client.send("Vous vous êtes connecté au salon !".encode('utf-8'))
 
         thread = threading.Thread(target=tri, args=(client,))
         thread.start()
