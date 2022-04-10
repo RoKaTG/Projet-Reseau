@@ -5,7 +5,7 @@ Host = '169.254.1.1'           #Ip du serveur
 Port = 8010         #Port à utilisé dependant des ports dispo
 
 serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #Création du serveur avec les sockets
-serveur.bind(Host, Port)                                #On bind l'ip et le port au serveur pour les connexion
+serveur.bind((Host, Port))                                #On bind l'ip et le port au serveur pour les connexion
 
 serveur.listen()
 
