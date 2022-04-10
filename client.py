@@ -1,11 +1,11 @@
 import socket
 import threading
-import tkinter              #bibliothéque python d'interface graphique
+import tkinter              #bibliothÃ©que python d'interface graphique
 import tkinter.scrolledtext
 from tkinter import simpledialog
 
-Host = '169.254.1.1' #127.0.0.1       #idem qu'en serveur
-Port = 8010
+HOST = '169.254.1.1'
+PORT = 8010
 
 
 #Nous avons besoin de cette fois ci une classe client qui contiendra le gui et les methodes de thread
@@ -15,85 +15,85 @@ class Client :
         self.sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)       #creation du socket
         self.sock.connect((host, port))                               #connexion via port + host
 
-        alert = tkinter.Tk()    #fenetre
-        alert.withdraw()
+        msg = tkinter.Tk()
+        msg.withdraw()
 
-        self.pseudo = simpledialog.askstring("Username", "Ecrivez votre pseudonyme", parent=alert)       #Pop up pour l'entrée du pseudo
-        self.interface = False    #interface du chat
-        self.run = True
+        self.nickname = simpledialog.askstring("Nickname", "Please choose a nickname", parent=msg)
 
-        thread = threading.Thread(targuet=self.loop_gui())
-        reception_thread = threading.Thread(targuet=self.reception)
+        self.gui_done = False
+        self.running = True
 
-        thread.start()
-        reception_thread.start()
+        gui_thread = threading.Thread(target=self.gui_loop)
+        receive_thread = threading.Thread(target=self.receive)
+
+        gui_thread.start()
+        receive_thread.start()
 
 
 #Methode d'interface
 
-    def loop_gui(self) :
-        self.windows = tkinter.Tk()
-        self.windows.configure(bg="lightgray")
+    def gui_loop(self) :
+        self.win = tkinter.Tk()
+        self.win.configure(bg="lightgray")
 
-        self.chat = tkinter.Label(self.windows, text="Chat :", bg="lightgrey")
-        self.chat.config(font=("Arial", 11))
-        self.chat.pack(padx=20, pady=5)
+        self.chat_label = tkinter.Label(self.win, text="Chat:", bg="lightgray")
+        self.chat_label.config(font=("Arial", 12))
+        self.chat_label.pack(padx=20, pady=5)
 
-        self.scroll = tkinter.scrolledtext.ScrolledText(self.windows)
-        self.scroll.pack(padx=20, pady=5)
-        self.scroll.config(state='disabled')
+        self.text_area = tkinter.scrolledtext.ScrolledText(self.win)
+        self.text_area.pack(padx=20, pady=5)
+        self.text_area.config(state='disabled')
 
-        self.message = tkinter.Label(self.windows, text="Message :", bg="red")
-        self.message.config(font=("Arial", 11))
-        self.message.pack(padx=20, pady=5)
+        self.msg_label = tkinter.Label(self.win, text="Message:", bg="red")
+        self.msg_label.config(font=("Arial", 12))
+        self.msg_label.pack(padx=20, pady=5)
 
-        self.imput = tkinter.Text(self.windows, height=5)
-        self.imput.pack(padx=20, pady=5)
+        self.input_area = tkinter.Text(self.win, height=3)
+        self.input_area.pack(padx=20, pady=5)
 
-        self.send_button = tkinter.Button(self.windows, text="Send", command=self.write)
-        self.send_button.config(font=("Arial", 11))
+        self.send_button = tkinter.Button(self.win, text="Send", command=self.write)
+        self.send_button.config(font=("Arial", 12))
         self.send_button.pack(padx=20, pady=5)
 
-        self.interface = True
+        self.gui_done = True
 
-        self.windows.protocol("WM_DELETE_WINDOWS", self.stop)
+        self.win.protocol("WM_DELETE_WINDOW", self.stop)
 
-        self.windows.mainloop()
+        self.win.mainloop()
 
         # Methode qui permet l'ecriture du msg
 
     def write(self):
-        message = f"{self.pseudo}: {self.imput.get('1.0', 'end')}"
+        message = f"{self.nickname}: {self.input_area.get('1.0', 'end')}"
         self.sock.send(message.encode('utf-8'))
-        self.imput.delete('1.0', 'end')
+        self.input_area.delete('1.0', 'end')
 
         # Methode qui permet d'arreter la fenetre de chat
 
     def stop(self):
-        self.run = False
-        self.windows.destroy()
+        self.running = False
+        self.win.destroy()
         self.sock.close()
         exit(0)
 
 
-    def reception(self) :
-        while self.run:
+    def receive(self) :
+        while self.running:
             try:
-                msg = self.sock.recv(1024).decode('utf-8')
-                if msg == 'Username':
-                    self.sock.send(self.pseudo.encode('utf-8'))
+                message = self.sock.recv(1024).decode('utf-8')
+                if message == 'NICK':
+                    self.sock.send(self.nickname.encode('utf-8'))
                 else:
-                    if self.interface:
-                        self.scroll.config(state='normal')
-                        self.scroll.insert('end', msg)
-                        self.scroll.yview('end')
-                        self.scroll.config(state='disabled')
+                    if self.gui_done:
+                        self.text_area.config(state='normal')
+                        self.text_area.insert('end', message)
+                        self.text_area.yview('end')
+                        self.text_area.config(state='disabled')
             except ConnectionAbortedError:
                 break
             except:
-                print('Erreur, fermeture du client')
+                print("Error")
                 self.sock.close()
                 break
 
-client = Client(Host, Port)
-
+client = Client(HOST, PORT)

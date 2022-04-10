@@ -25,7 +25,8 @@ def diffusion(message) :
 def tri(client) :
     while True:
         try:
-            message = client.recv(1024)   #Envoi du message si aucune erreur
+            message = client.recv(1024)     #Envoi du message si aucune erreur
+            print(f"{pseudonyme[liste_clients.index(client)]} says {message}")
             diffusion(message)
         except:
             index = liste_clients.index(client)     #Sinon ferme l'instance et deco le client
