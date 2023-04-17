@@ -1,14 +1,18 @@
 # Projet-Reseau
 Ce projet est une application Python qui permet de créer un chat interactif sur un réseau ad-hoc à l'aide de Raspberry Pi. L'application a été développée avec l'IDE JetBrains PyCharm.
 
-Prérequis
+## Prérequis
 Avant de pouvoir exécuter l'application, vous aurez besoin des éléments suivants :
 
-Un IDE Python comme PyCharm ou Python installé sur votre machine
-Des Raspberry Pi connectés à un réseau ad-hoc
-Les adresses IP des Raspberry Pi
-Un port disponible sur votre ordinateur ou votre réseau
-Installation et exécution
+-Un IDE Python comme PyCharm ou Python installé sur votre machine
+
+-Des Raspberry Pi connectés à un réseau ad-hoc
+
+-Les adresses IP des Raspberry Pi
+
+-Un port disponible sur votre ordinateur ou votre réseau
+
+## Installation et exécution
 Téléchargez le projet à partir de GitHub.
 
 Ouvrez le projet dans l'IDE Python de votre choix.
@@ -19,15 +23,15 @@ Dans chaque fichier, modifiez la valeur de HOST pour correspondre à l'adresse I
 
 Par exemple, si l'adresse IP de votre Raspberry Pi est 192.168.1.100, vous devez définir HOST comme suit :
 
-python
-Copy code
-HOST = '192.168.1.100'
+```python
+HOST = '192.168.1.100'```
+
 Définissez également un numéro de port disponible sur votre ordinateur ou votre réseau.
 
 Par exemple, si vous souhaitez utiliser le port 5000, vous devez définir PORT comme suit :
 
-python
-Copy code
+
+
 PORT = 5000
 Enregistrez les fichiers modifiés.
 
