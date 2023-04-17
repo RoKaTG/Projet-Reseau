@@ -24,7 +24,8 @@ Dans chaque fichier, modifiez la valeur de HOST pour correspondre à l'adresse I
 Par exemple, si l'adresse IP de votre Raspberry Pi est 192.168.1.100, vous devez définir HOST comme suit :
 
 ```python
-HOST = '192.168.1.100'```
+HOST = '192.168.1.100'
+```
 
 Définissez également un numéro de port disponible sur votre ordinateur ou votre réseau.
 
@@ -32,20 +33,24 @@ Par exemple, si vous souhaitez utiliser le port 5000, vous devez définir PORT c
 
 
 
+```python
 PORT = 5000
+```
 Enregistrez les fichiers modifiés.
 
 Ouvrez un terminal et exécutez le fichier server.py sur votre Raspberry Pi à l'aide de la commande suivante :
 
-bash
-Copy code
+```bash
 python server.py
+```
 Dans un autre terminal, exécutez le fichier client.py sur votre ordinateur à l'aide de la commande suivante :
 
-bash
-Copy code
+```bash
 python client.py
+```
+Entrez votre pseudonyme.
+
 Vous pouvez désormais utiliser le chat interactif en tapant des messages dans le terminal du client.
 
-Conclusion
+## Conclusion
 C'est tout ! Vous pouvez maintenant utiliser cette application pour discuter avec d'autres personnes sur votre réseau ad-hoc. N'hésitez pas à explorer le code source et à l'améliorer si vous le souhaitez.
